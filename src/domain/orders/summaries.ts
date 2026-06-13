@@ -3,13 +3,6 @@ import type { OrderSummary, GroupCategory } from '../../types/group.js';
 import { classifyGroup } from './grouping.js';
 import { isNeedingReview } from './review.js';
 
-const ALL_GROUPS: GroupCategory[] = [
-  'single-sku-qty-1',
-  'single-sku-qty-2',
-  'single-sku-qty-3-plus',
-  'mixed-multi-line'
-];
-
 export function computeSummary(orders: Order[]): OrderSummary {
   const byGroup: Record<GroupCategory, number> = {
     'single-sku-qty-1': 0,
