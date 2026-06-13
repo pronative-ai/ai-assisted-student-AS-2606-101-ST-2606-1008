@@ -1,5 +1,4 @@
 import type { OrderProvider } from '../data/mock/provider.js';
-import type { Order } from '../types/order.js';
 import { computeSummary } from '../domain/orders/index.js';
 import { renderSummary } from '../components/dashboard/summary.js';
 import { renderGroupedSections } from '../components/dashboard/groups.js';
@@ -72,8 +71,6 @@ export class AppShell {
 
       const result = this.state.markProcessed(orderId);
       if (result) {
-        const order = this.provider.getOrderById(orderId);
-        const customer = order?.customerName ?? orderId;
         this.log.addEvent('order-processed', `Order marked as processed`, orderId);
       } else {
         this.log.addEvent('duplicate-prevented', `Duplicate processing prevented`, orderId);

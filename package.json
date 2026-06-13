@@ -4,10 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "clean": "rimraf public/js",
     "build": "tsc",
-    "start": "npx http-server public -c-1 -p 8080"
+    "typecheck": "tsc --noEmit",
+    "start": "http-server public -c-1 -p 8080"
   },
   "devDependencies": {
+    "http-server": "^14.1.1",
+    "rimraf": "^6.0.1",
     "typescript": "^5.7.0"
   }
 }
