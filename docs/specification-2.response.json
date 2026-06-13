@@ -1,0 +1,330 @@
+{
+  "requirement_summary": "Every morning, operations staff manually review unshipped Amazon.de FBM orders, retrieve order items, separate orders by SKU and quantity patterns, prepare picking and packing documents, and generate shipping labels. This manual process is time-consuming, creates duplicate-work risk, and leads to fulfillment mistakes when orders contain mixed SKUs, repeated products, or require special review. There is no structured workflow or tooling to automate the preparation phase of FBM order fulfillment.",
+  "functional_requirements": [
+    {
+      "id": "FR-1",
+      "title": "Load mock unshipped FBM orders",
+      "description": "The system shall load a set of mock/sample Amazon.de FBM orders with realistic data (order IDs, SKUs, quantities, customer info, order dates) on application startup.",
+      "priority": "High"
+    },
+    {
+      "id": "FR-2",
+      "title": "Display orders in a grouped dashboard view",
+      "description": "The system shall display unshipped orders grouped by SKU and quantity patterns: (a) Single SKU with quantity 1, (b) Single SKU with quantity 2, (c) Single SKU with quantity 3+, (d) Mixed/multi-line orders.",
+      "priority": "High"
+    },
+    {
+      "id": "FR-3",
+      "title": "Flag orders requiring manual review",
+      "description": "The system shall automatically identify and flag orders that require manual review, including: mixed SKU orders, orders with unusually high quantities, and orders with identical SKUs listed on multiple lines.",
+      "priority": "High"
+    },
+    {
+      "id": "FR-4",
+      "title": "Prevent duplicate processing of orders",
+      "description": "The system shall track which orders have been processed (via local state/storage) and visually distinguish processed from unprocessed orders to prevent duplicate fulfillment.",
+      "priority": "High"
+    },
+    {
+      "id": "FR-5",
+      "title": "Allow manual marking of orders as reviewed",
+      "description": "The system shall allow operations staff to mark individual orders or groups of orders as 'Reviewed' after visual inspection.",
+      "priority": "Medium"
+    },
+    {
+      "id": "FR-6",
+      "title": "Display order item details",
+      "description": "The system shall show item-level details (SKU, product name, quantity, price) for each order, accessible via expanding or selecting the order.",
+      "priority": "High"
+    },
+    {
+      "id": "FR-7",
+      "title": "Show aggregate counts and summaries",
+      "description": "The system shall display summary statistics: total orders loaded, orders by group, orders needing review, and orders processed.",
+      "priority": "Medium"
+    },
+    {
+      "id": "FR-8",
+      "title": "Support filtering and sorting of orders",
+      "description": "The system shall allow users to filter orders by group type (single SKU, mixed, etc.) and by review status, and sort by order date or SKU.",
+      "priority": "Low"
+    },
+    {
+      "id": "FR-9",
+      "title": "Log user actions and system events",
+      "description": "The system shall log key actions (order reviewed, order grouped, duplicate detected) and display them in a simple activity log panel.",
+      "priority": "Medium"
+    },
+    {
+      "id": "FR-10",
+      "title": "Provide a clear reset mechanism",
+      "description": "The system shall provide a reset action to clear processed state and reload fresh mock data for demonstration or restart purposes.",
+      "priority": "Low"
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "id": "NFR-1",
+      "category": "",
+      "description": "The first implementation shall be a single-page application (SPA) that runs entirely in the browser with no server-side component.",
+      "priority": "High"
+    },
+    {
+      "id": "NFR-2",
+      "category": "",
+      "description": "All order data shall be mock data embedded in the application. No real API calls to Amazon SP-API, DHL, or Easy Ship shall be made.",
+      "priority": "High"
+    },
+    {
+      "id": "NFR-3",
+      "category": "",
+      "description": "The dashboard shall be usable on both desktop and tablet viewports to accommodate different staff workstations.",
+      "priority": "Medium"
+    },
+    {
+      "id": "NFR-4",
+      "category": "",
+      "description": "The UI shall use clear visual grouping, color coding, and typography to distinguish order categories and review status at a glance.",
+      "priority": "High"
+    },
+    {
+      "id": "NFR-5",
+      "category": "",
+      "description": "The codebase shall be structured so that mock data providers can be easily replaced with real API service calls in the future.",
+      "priority": "Medium"
+    },
+    {
+      "id": "NFR-6",
+      "category": "",
+      "description": "The first implementation shall not include user authentication or role-based access control.",
+      "priority": "Medium"
+    },
+    {
+      "id": "NFR-7",
+      "category": "",
+      "description": "The application shall not depend on external network services at runtime. All data and logic shall be self-contained.",
+      "priority": "Medium"
+    },
+    {
+      "id": "NFR-8",
+      "category": "",
+      "description": "The dashboard shall follow basic accessibility practices (semantic HTML, ARIA labels, keyboard navigability) to support all staff.",
+      "priority": "Low"
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "ac-1",
+      "description": "On application startup, the SPA loads embedded mock Amazon.de FBM orders locally without making any external network requests, and each loaded order includes sufficient fields to support grouping, detail display, and summaries.",
+      "type": "functional",
+      "priority": "high",
+      "related_requirements": ["FR-1", "NFR-1", "NFR-2", "NFR-7"]
+    },
+    {
+      "id": "ac-2",
+      "description": "The dashboard groups all loaded unshipped orders into the defined categories: single SKU quantity 1, single SKU quantity 2, single SKU quantity 3+, and mixed/multi-line orders, using deterministic client-side logic.",
+      "type": "functional",
+      "priority": "high",
+      "related_requirements": ["FR-2", "NFR-5"]
+    },
+    {
+      "id": "ac-3",
+      "description": "Orders that are mixed SKU, contain unusually high quantities, or contain identical SKUs on multiple lines are automatically flagged as requiring manual review and are visually distinguishable in the dashboard.",
+      "type": "functional",
+      "priority": "high",
+      "related_requirements": ["FR-3", "NFR-4"]
+    },
+    {
+      "id": "ac-4",
+      "description": "The application tracks processed or reviewed order state using browser-local state or storage, clearly differentiates processed versus unprocessed orders, and prevents the same order from being inadvertently processed twice within the current demo workflow.",
+      "type": "functional",
+      "priority": "high",
+      "related_requirements": ["FR-4", "FR-5"]
+    },
+    {
+      "id": "ac-5",
+      "description": "Users can expand or select an order to view item-level details including SKU, product name, quantity, and price, with the displayed details matching the loaded mock data for that order.",
+      "type": "functional",
+      "priority": "high",
+      "related_requirements": ["FR-6"]
+    },
+    {
+      "id": "ac-6",
+      "description": "The dashboard displays accurate aggregate summaries for total orders loaded, counts by group, orders needing review, and orders processed, and these summaries update when order review or processed state changes.",
+      "type": "functional",
+      "priority": "medium",
+      "related_requirements": ["FR-7"]
+    },
+    {
+      "id": "ac-7",
+      "description": "Filtering and sorting controls, if included in the delivered slice, correctly narrow and order the visible dataset by supported group, review status, order date, or SKU without mutating the underlying mock order data.",
+      "type": "functional",
+      "priority": "low",
+      "related_requirements": ["FR-8"]
+    },
+    {
+      "id": "ac-8",
+      "description": "Key user and system events, including order reviewed, order grouped, duplicate-processing prevention events, and reset actions, are recorded in an in-app activity log panel in a way that is understandable to operators during the demo workflow.",
+      "type": "functional",
+      "priority": "medium",
+      "related_requirements": ["FR-9"]
+    },
+    {
+      "id": "ac-9",
+      "description": "A reset action clears locally tracked processed or reviewed state and restores the original embedded mock dataset and dashboard summaries without requiring any backend service.",
+      "type": "functional",
+      "priority": "medium",
+      "related_requirements": ["FR-10", "NFR-1", "NFR-2"]
+    },
+    {
+      "id": "ac-10",
+      "description": "The SPA remains usable on desktop and tablet viewports and supports basic accessibility practices for interactive controls and order detail expansion, including semantic structure, keyboard access, and meaningful labels.",
+      "type": "non_functional",
+      "priority": "medium",
+      "related_requirements": ["NFR-3", "NFR-4", "NFR-8"]
+    }
+  ],
+  "given_when_then": [
+    {
+      "id": "gwt-1",
+      "given": "The user opens the application in a supported browser",
+      "when": "The SPA initializes",
+      "then": "Embedded mock unshipped FBM orders are loaded locally and shown on the dashboard without any real external API calls",
+      "related_acceptance_criteria": ["ac-1"]
+    },
+    {
+      "id": "gwt-2",
+      "given": "A loaded order contains a single SKU with quantity 2",
+      "when": "The grouping logic is applied",
+      "then": "The order appears in the single SKU quantity 2 group and is not shown in any conflicting group",
+      "related_acceptance_criteria": ["ac-2"]
+    },
+    {
+      "id": "gwt-3",
+      "given": "A loaded order contains multiple SKUs or the same SKU on multiple lines",
+      "when": "The dashboard evaluates review rules",
+      "then": "The order is flagged for manual review and visually distinguished from standard orders",
+      "related_acceptance_criteria": ["ac-3"]
+    },
+    {
+      "id": "gwt-4",
+      "given": "An unprocessed order is visible on the dashboard",
+      "when": "The user marks the order as reviewed or processed",
+      "then": "Its state changes visibly, the updated state is retained in local browser state, and duplicate processing is prevented in the current workflow",
+      "related_acceptance_criteria": ["ac-4", "ac-6"]
+    },
+    {
+      "id": "gwt-5",
+      "given": "An order row is shown in the grouped dashboard",
+      "when": "The user expands or selects that order",
+      "then": "The UI reveals the order's item-level details including SKU, product name, quantity, and price",
+      "related_acceptance_criteria": ["ac-5"]
+    },
+    {
+      "id": "gwt-6",
+      "given": "The dashboard has loaded orders and current status counts",
+      "when": "The user changes review state for one or more orders",
+      "then": "The summary counts and activity log update to reflect the new state accurately",
+      "related_acceptance_criteria": ["ac-6", "ac-8"]
+    },
+    {
+      "id": "gwt-7",
+      "given": "The user has marked several orders as reviewed or processed",
+      "when": "The user invokes the reset action",
+      "then": "Local tracked state is cleared, the original mock dataset is restored, and summary counts return to their initial values",
+      "related_acceptance_criteria": ["ac-9"]
+    },
+    {
+      "id": "gwt-8",
+      "given": "The application is used on a tablet viewport or with keyboard navigation",
+      "when": "The user interacts with filters, order rows, and expansion controls",
+      "then": "The UI remains usable, controls are reachable, and labels and structure support accessible operation",
+      "related_acceptance_criteria": ["ac-10"]
+    }
+  ],
+  "verification_checks": [
+    "Confirm the application performs no real network calls at runtime and uses only embedded mock data for the delivered feature set.",
+    "Confirm every loaded order is assigned to exactly one primary grouping bucket based on the defined SKU and quantity rules.",
+    "Confirm review flags are applied to mixed SKU orders, repeated-SKU multi-line orders, and configured high-quantity cases.",
+    "Confirm processed or reviewed state is visibly distinguishable and persists for the intended local browser session or storage mechanism.",
+    "Confirm dashboard summary counts and activity log entries stay consistent after review actions and reset operations."
+  ],
+  "edge_cases": [
+    "An order contains the same SKU on multiple separate lines and should be flagged for manual review rather than treated as a simple single-SKU case.",
+    "An order contains a single SKU with quantity 3 or greater and must be grouped correctly while also supporting any high-quantity review rule.",
+    "The mock dataset is empty or fails validation, and the UI should display an empty-state or error-safe message rather than breaking.",
+    "Two orders share similar item compositions but have distinct order IDs and must remain independently trackable for processed state.",
+    "Local storage is unavailable, blocked, or cleared, and the application should fall back gracefully to in-memory state for the active session if feasible.",
+    "The user triggers reset after marking multiple orders reviewed, and all visual states, summaries, and logs must return to the expected baseline.",
+    "An order row has missing optional display data such as product name formatting, and the UI should still render required identifiers safely.",
+    "Sorting and filtering combinations may produce zero visible results, and the dashboard should show a clear no-results state."
+  ],
+  "test_guidance": {
+    "unit_test_ideas": [
+      "Test grouping logic for each category: single SKU quantity 1, single SKU quantity 2, single SKU quantity 3+, and mixed/multi-line orders.",
+      "Test manual review detection rules for mixed SKU orders, repeated-SKU multi-line orders, and high-quantity thresholds.",
+      "Test summary calculation functions for total orders, grouped counts, review-required counts, and processed counts.",
+      "Test state transition logic for marking orders reviewed or processed and preventing duplicate processing.",
+      "Test reset logic to ensure original mock data and derived state are restored correctly.",
+      "Test activity log generation for reviewed actions, grouping events, duplicate-prevention events, and reset events."
+    ],
+    "integration_test_ideas": [
+      "Verify the SPA loads mock data on startup and renders grouped dashboard sections without any backend dependency.",
+      "Verify expanding an order row shows item details that match the source mock dataset.",
+      "Verify marking an order reviewed updates row state, summaries, and activity log in one end-to-end interaction.",
+      "Verify locally persisted processed state is restored on page reload when storage is enabled.",
+      "Verify reset clears local state and reloads the original dashboard state from embedded mock data.",
+      "Verify tablet viewport rendering and keyboard navigation across major interactive controls."
+    ],
+    "manual_test_steps": [
+      "Open the application in a browser and confirm orders appear immediately without any login or server setup.",
+      "Inspect each dashboard group and confirm representative orders are placed into the correct SKU and quantity category.",
+      "Open at least one mixed order and one repeated-SKU order and confirm both are visibly flagged for manual review.",
+      "Mark one order as reviewed and confirm its visual state changes and the processed or reviewed count updates.",
+      "Attempt to process the same order again and confirm the UI prevents duplicate handling or clearly indicates it was already processed.",
+      "Expand multiple orders and confirm SKU, product name, quantity, and price details are shown correctly.",
+      "Check the activity log and confirm user actions and system events are recorded in understandable language.",
+      "Use reset and confirm the initial mock dataset, statuses, and summary counts are restored."
+    ]
+  },
+  "definition_of_done": [
+    "All preserved requirement fields remain present and unchanged in structure for downstream agent compatibility.",
+    "At least five acceptance criteria are defined and traceable to functional or non-functional requirements.",
+    "Given/When/Then scenarios cover core user flows for load, grouping, review flagging, state changes, details, and reset.",
+    "At least three verification checks are provided and are actionable for human review or QA validation.",
+    "Edge cases and test guidance are documented for grouping logic, review detection, persistence, reset behavior, and UI usability.",
+    "The solution scope remains browser-only, mock-data-only, and avoids any real Amazon, DHL, Easy Ship, GitHub, or Azure mutations.",
+    "Acceptance criteria and test guidance are sufficiently clear to be consumed directly by the Solution Architect Agent."
+  ],
+  "issue_candidates": [
+    {
+      "title": "[Epic] Automate Morning FBM Order Fulfillment Preparation",
+      "description": "Automate the morning workflow for Amazon.de FBM order fulfillment preparation. Includes order syncing, SKU/quantity grouping, review identification, duplicate prevention, pick/pack document generation, and shipping label generation across multiple implementation cycles.",
+      "priority": "high",
+      "related_requirements": ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5", "FR-6", "FR-7", "FR-8", "FR-9", "FR-10"],
+      "recommended_next_agent": "Solution Architecture Agent"
+    },
+    {
+      "title": "[User Story] FBM Order Grouping & Review Dashboard (Mock Data)",
+      "description": "As an operations assistant, I want a dashboard that loads mock unshipped Amazon.de FBM orders, groups them by SKU and quantity patterns, flags orders needing review, and prevents duplicate processing so that I can quickly assess the morning fulfillment workload.",
+      "priority": "high",
+      "related_requirements": ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5", "FR-6", "FR-7"],
+      "recommended_next_agent": "Solution Architecture Agent"
+    }
+  ],
+  "selected_issue_candidate": {
+    "title": "[User Story] FBM Order Grouping & Review Dashboard (Mock Data)",
+    "description": "As an operations assistant, I want a dashboard that loads mock unshipped Amazon.de FBM orders, groups them by SKU and quantity patterns, flags orders needing review, and prevents duplicate processing so that I can quickly assess the morning fulfillment workload.",
+    "priority": "high",
+    "related_requirements": ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5", "FR-6", "FR-7"],
+    "recommended_next_agent": "Solution Architecture Agent"
+  },
+  "handoff": {
+    "implementation_brief_markdown": "First implementation: FBM Order Grouping & Review Dashboard (Mock Data)",
+    "notes_for_copilot": "Build a single-page dashboard with mock data",
+    "notes_for_cicd_agent": "",
+    "notes_for_iac_agent": "",
+    "notes_for_test_agent": "",
+    "notes_for_reviewer": ""
+  }
+}
