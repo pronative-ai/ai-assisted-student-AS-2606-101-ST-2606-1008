@@ -1,0 +1,13 @@
+{
+  "name": "fbm-order-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "npx http-server public -c-1 -p 8080"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
