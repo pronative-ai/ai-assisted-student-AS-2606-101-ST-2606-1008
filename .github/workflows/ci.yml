@@ -45,6 +45,17 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build .NET API
+        run: dotnet build backend/src/OpencodeTelemetry.Api/OpencodeTelemetry.Api.csproj --configuration Release
+
+      - name: Run .NET Tests
+        run: dotnet test backend/tests/OpencodeTelemetry.Api.UnitTests/OpencodeTelemetry.Api.UnitTests.csproj --configuration Release --no-restore
+
       - name: Notify CI/CD Review Agent on Failure
         if: failure()
         run: |
