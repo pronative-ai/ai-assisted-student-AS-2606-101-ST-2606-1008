@@ -116,7 +116,23 @@ jobs:
               "code_review_report_id": "${{ steps.code-review.outputs.report_id }}"
             }'            
 
+  frontend-detect:
+    runs-on: ubuntu-latest
+    outputs:
+      exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: check
+        run: |
+          if [ -f "src/frontend/package.json" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
   frontend:
+    needs: frontend-detect
+    if: needs.frontend-detect.outputs.exists == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -193,4 +209,4 @@ jobs:
               "pull_request_number": ${{ github.event.pull_request.number }},
               "commit_sha": "${{ github.event.pull_request.head.sha }}",
               "code_review_report_id": "${{ steps.code-review.outputs.report_id }}"
-            }'          
+            }'
