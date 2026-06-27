@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpencodeTelemetry.Api.UnitTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc2fb0d306f195af1063c4f0de3fcb8e1a7b6ddc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0087b6bbd78eb201f85a1a63e0655d50a1a9cc5e")]
 [assembly: System.Reflection.AssemblyProductAttribute("OpencodeTelemetry.Api.UnitTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpencodeTelemetry.Api.UnitTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

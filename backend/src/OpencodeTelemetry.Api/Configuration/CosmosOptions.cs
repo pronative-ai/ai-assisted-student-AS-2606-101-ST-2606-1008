@@ -2,7 +2,7 @@ namespace OpencodeTelemetry.Api.Configuration;
 
 public class CosmosOptions
 {
-    public const string SectionName = "Cosmos";
+    public const string SectionName = "CosmosDb";
 
     public string ConnectionString { get; set; } = string.Empty;
     public string DatabaseId { get; set; } = "opencode-telemetry";

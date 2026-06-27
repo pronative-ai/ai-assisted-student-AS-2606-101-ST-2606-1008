@@ -1,3 +1,5 @@
+using Azure.Identity;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using OpencodeTelemetry.Api.Application.Aggregation;
 using OpencodeTelemetry.Api.Application.Normalization;
 using OpencodeTelemetry.Api.Configuration;
@@ -9,15 +11,46 @@ using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var keyVaultOptions = builder.Configuration
+    .GetSection(KeyVaultOptions.SectionName)
+    .Get<KeyVaultOptions>();
+
+if (!string.IsNullOrEmpty(keyVaultOptions?.VaultUri))
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyVaultOptions.VaultUri),
+        new DefaultAzureCredential(),
+        new AzureKeyVaultConfigurationOptions
+        {
+            ReloadInterval = TimeSpan.FromHours(1)
+        });
+}
+
 builder.Services.Configure<CosmosOptions>(builder.Configuration.GetSection(CosmosOptions.SectionName));
 builder.Services.Configure<TelemetryOptions>(builder.Configuration.GetSection(TelemetryOptions.SectionName));
+builder.Services.Configure<OtlpOptions>(builder.Configuration.GetSection($"{TelemetryOptions.SectionName}:{OtlpOptions.SectionName}"));
+builder.Services.Configure<KeyVaultOptions>(builder.Configuration.GetSection(KeyVaultOptions.SectionName));
+
+var cosmosConnectionString = builder.Configuration["CosmosDb:ConnectionString"];
+
+ConfigurationValidator.ValidateRequiredConfiguration(
+    cosmosConnectionString,
+    "CosmosDb:ConnectionString",
+    builder.Configuration["KeyVault:CosmosDbConnectionStringSecretName"]);
+
+var otlpAuthHeader = builder.Configuration["Telemetry:Otlp:AuthHeader"];
+
+ConfigurationValidator.ValidateRequiredConfiguration(
+    otlpAuthHeader,
+    "Telemetry:Otlp:AuthHeader",
+    builder.Configuration["KeyVault:TelemetryOtlpAuthHeaderSecretName"]);
+
+var otlpEndpoint = builder.Configuration["Telemetry:Otlp:Endpoint"];
+ConfigurationValidator.ValidateOtlpEndpoint(otlpEndpoint);
 
 builder.Services.AddSingleton(sp =>
 {
-    var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<CosmosOptions>>().Value;
-    if (string.IsNullOrEmpty(options.ConnectionString))
-        return null!;
-    return new CosmosClient(options.ConnectionString);
+    return new CosmosClient(cosmosConnectionString!);
 });
 
 builder.Services.AddScoped<ICosmosTelemetryRepository, CosmosTelemetryRepository>();

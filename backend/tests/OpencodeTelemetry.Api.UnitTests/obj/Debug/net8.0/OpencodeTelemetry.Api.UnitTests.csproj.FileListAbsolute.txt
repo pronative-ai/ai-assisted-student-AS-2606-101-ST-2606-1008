@@ -20,6 +20,9 @@ C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\OpencodeTelemetry.Api.UnitTests.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\OpencodeTelemetry.Api.UnitTests.pdb
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Azure.Extensions.AspNetCore.Configuration.Secrets.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Azure.Identity.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Azure.Security.KeyVault.Secrets.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Castle.Core.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Google.Protobuf.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Grpc.Core.Api.dll
@@ -42,6 +45,9 @@ C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Binder.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.Extensions.Logging.ApplicationInsights.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.TestPlatform.CoreUtilities.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\tests\OpencodeTelemetry.Api.UnitTests\bin\Debug\net8.0\Microsoft.TestPlatform.PlatformAbstractions.dll

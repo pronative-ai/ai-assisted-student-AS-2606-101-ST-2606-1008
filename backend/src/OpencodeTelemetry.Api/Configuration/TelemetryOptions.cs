@@ -8,3 +8,11 @@ public class TelemetryOptions
     public string RepoKey { get; set; } = "ai-assisted-student-AS-2606-101-ST-2606-1008";
     public string ResourceGroupKey { get; set; } = "rg-as-2606-101-st-2606-1008";
 }
+
+public class OtlpOptions
+{
+    public const string SectionName = "Otlp";
+
+    public string AuthHeader { get; set; } = string.Empty;
+    public string Endpoint { get; set; } = string.Empty;
+}

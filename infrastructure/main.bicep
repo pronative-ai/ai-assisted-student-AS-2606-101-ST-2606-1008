@@ -105,6 +105,22 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
+resource cosmosConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'cosmosdb-connection-string'
+  properties: {
+    value: cosmosAccount.listConnectionStrings().connectionStrings[0].connectionString
+  }
+}
+
+resource appInsightsConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'appinsights-connection-string'
+  properties: {
+    value: appInsights.properties.ConnectionString
+  }
+}
+
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-05-01' = {
   name: 'cae-${containerAppName}'
   location: location
@@ -122,14 +138,13 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-05-01'
 resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
   name: containerAppName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     managedEnvironmentId: containerAppsEnvironment.id
     configuration: {
       secrets: [
-        {
-          name: 'cosmos-connection-string'
-          value: cosmosAccount.listConnectionStrings().connectionStrings[0].connectionString
-        }
         {
           name: 'appinsights-connection-string'
           value: appInsights.properties.ConnectionString
@@ -155,8 +170,16 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
           image: containerImage
           env: [
             {
-              name: 'Cosmos__ConnectionString'
-              secretRef: 'cosmos-connection-string'
+              name: 'KeyVault__VaultUri'
+              value: keyVault.properties.vaultUri
+            }
+            {
+              name: 'KeyVault__CosmosDbConnectionStringSecretName'
+              value: 'cosmosdb-connection-string'
+            }
+            {
+              name: 'KeyVault__TelemetryOtlpAuthHeaderSecretName'
+              value: 'telemetry-otlp-auth-header'
             }
             {
               name: 'ApplicationInsights__ConnectionString'
@@ -178,6 +201,16 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
         maxReplicas: 10
       }
     }
+  }
+}
+
+resource keyVaultSecretsUserRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid('kv-secrets-user-${containerAppName}')
+  scope: keyVault
+  properties: {
+    principalId: containerApp.identity.principalId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
+    principalType: 'ServicePrincipal'
   }
 }
 

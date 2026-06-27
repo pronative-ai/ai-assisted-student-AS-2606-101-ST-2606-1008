@@ -12,6 +12,9 @@ C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\OpencodeTelemetry.Api.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\OpencodeTelemetry.Api.pdb
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Azure.Core.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Azure.Extensions.AspNetCore.Configuration.Secrets.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Azure.Identity.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Azure.Security.KeyVault.Secrets.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Google.Protobuf.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Grpc.Core.Api.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Grpc.Net.Client.dll
@@ -32,6 +35,9 @@ C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.Bcl.HashCode.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.Extensions.Configuration.Binder.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.Extensions.Logging.ApplicationInsights.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.Identity.Client.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.OpenApi.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\jenit\source\repos\ai-assisted-student-AS-2606-101-ST-2606-1008\backend\src\OpencodeTelemetry.Api\bin\Release\net8.0\Newtonsoft.Json.dll
