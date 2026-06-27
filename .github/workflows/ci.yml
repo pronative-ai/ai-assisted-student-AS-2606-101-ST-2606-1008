@@ -1,4 +1,4 @@
-name: "[CI] Build and Test (Unified Agent)"
+name: "[CI] Build and Test"
 
 on:
   push:
@@ -27,8 +27,8 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
-    
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,12 +38,28 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-      
-      - name: Install dependencies
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
         run: npm ci
-      
-      - name: Build
+
+      - name: Build frontend
+        working-directory: frontend
         run: npm run build
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore backend
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Build backend
+        working-directory: backend
+        run: dotnet build --no-restore
 
       - name: Notify CI/CD Review Agent on Failure
         if: failure()

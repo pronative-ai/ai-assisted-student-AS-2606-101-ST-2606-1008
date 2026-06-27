@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/api/">
+    <Project Path="api/BudgetTracker.Api.csproj" />
+  </Folder>
+  <Folder Name="/domain/">
+    <Project Path="domain/BudgetTracker.Domain.csproj" />
+  </Folder>
+  <Folder Name="/persistence/">
+    <Project Path="persistence/BudgetTracker.Persistence.csproj" />
+  </Folder>
+</Solution>

@@ -7,3 +7,8 @@ public/js/
 *.log
 .DS_Store
 Thumbs.db
+backend/**/bin/
+backend/**/obj/
+backend/data/
+*.user
+*.suo
