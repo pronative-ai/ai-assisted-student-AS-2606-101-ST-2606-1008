@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OpencodeTelemetry.Api/OpencodeTelemetry.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpencodeTelemetry.Api.UnitTests/OpencodeTelemetry.Api.UnitTests.csproj" />
+  </Folder>
+</Solution>
