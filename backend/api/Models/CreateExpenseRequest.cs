@@ -1,11 +1,9 @@
-namespace BudgetTracker.Domain;
+namespace BudgetTracker.Api.Models;
 
-public class Expense
+public class CreateExpenseRequest
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
     public decimal Amount { get; set; }
     public string Date { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
