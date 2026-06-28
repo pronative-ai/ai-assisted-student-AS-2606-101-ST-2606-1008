@@ -66,6 +66,8 @@ app.MapPost("/otlp/v1/logs", OtlpLogsEndpoint.HandleAsync);
 
 app.MapGet("/api/opencode/token-usage", TokenUsageEndpoint.HandleAsync);
 app.MapGet("/api/opencode/token-usage/series", TokenSeriesEndpoint.HandleAsync);
+app.MapGet("/api/telemetry/tokens/total", TokenUsageEndpoint.HandleAsync);
+app.MapGet("/api/telemetry/tokens/timeseries", TokenSeriesEndpoint.HandleAsync);
 app.MapGet("/api/opencode/logs/api-request", LogQueryEndpoints.HandleApiRequestAsync);
 app.MapGet("/api/opencode/logs/api-error", LogQueryEndpoints.HandleApiErrorAsync);
 
