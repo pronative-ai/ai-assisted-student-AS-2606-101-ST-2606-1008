@@ -128,15 +128,9 @@ public class TokenAggregationService
 
         var lastInWindow = inWindow.Last().cumulative_value;
 
-        double baseline;
-        if (beforeWindow != null)
-        {
-            baseline = beforeWindow.cumulative_value;
-        }
-        else
-        {
-            baseline = inWindow.First().cumulative_value;
-        }
+        var baseline = beforeWindow != null
+            ? beforeWindow.cumulative_value
+            : inWindow.First().cumulative_value;
 
         var delta = lastInWindow - baseline;
 
