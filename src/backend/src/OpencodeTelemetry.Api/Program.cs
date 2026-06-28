@@ -5,18 +5,21 @@ using OpencodeTelemetry.Api.Endpoints.Ingestion;
 using OpencodeTelemetry.Api.Endpoints.Query;
 using OpencodeTelemetry.Api.Infrastructure.Cosmos;
 using OpencodeTelemetry.Api.Infrastructure.Observability;
+using Azure.Identity;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ConfigureKeyVault(builder);
+
+builder.Services.Configure<KeyVaultOptions>(builder.Configuration.GetSection(KeyVaultOptions.SectionName));
 builder.Services.Configure<CosmosOptions>(builder.Configuration.GetSection(CosmosOptions.SectionName));
 builder.Services.Configure<TelemetryOptions>(builder.Configuration.GetSection(TelemetryOptions.SectionName));
 
 builder.Services.AddSingleton(sp =>
 {
     var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<CosmosOptions>>().Value;
-    if (string.IsNullOrEmpty(options.ConnectionString))
-        return null!;
     return new CosmosClient(options.ConnectionString);
 });
 
@@ -45,6 +48,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+ConfigurationValidator.ValidateRequiredConfiguration(app.Configuration);
+
 app.UseCors();
 
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
@@ -65,3 +70,16 @@ app.MapGet("/api/opencode/logs/api-request", LogQueryEndpoints.HandleApiRequestA
 app.MapGet("/api/opencode/logs/api-error", LogQueryEndpoints.HandleApiErrorAsync);
 
 app.Run();
+
+static void ConfigureKeyVault(WebApplicationBuilder builder)
+{
+    var vaultUri = builder.Configuration["KeyVault:VaultUri"];
+    if (!string.IsNullOrEmpty(vaultUri))
+    {
+        builder.Configuration.AddAzureKeyVault(
+            new Uri(vaultUri),
+            new DefaultAzureCredential());
+    }
+}
+
+
