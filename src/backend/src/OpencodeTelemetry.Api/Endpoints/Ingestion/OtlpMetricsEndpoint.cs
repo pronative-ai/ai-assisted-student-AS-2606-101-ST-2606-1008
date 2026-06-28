@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Linq;
 using OpencodeTelemetry.Api.Application.Normalization;
 using OpencodeTelemetry.Api.Infrastructure.Cosmos;
 using OpencodeTelemetry.Api.Infrastructure.Observability;
@@ -56,19 +57,23 @@ public static class OtlpMetricsEndpoint
             {
                 foreach (var datapoint in metric.DataPoints)
                 {
-                    if (!normalizer.TryNormalize(
+                foreach (var normalized in metric.DataPoints
+                             .Select(datapoint =>
+                             {
+                                 return normalizer.TryNormalize(
+                                     datapoint.MetricType,
+                                     datapoint.TimeUnixNano,
+                                     datapoint.CumulativeValue,
+                                     null,
+                                     out var record)
+                                     ? new { datapoint, record }
+                                     : new { datapoint, record = (object?)null };
+                             })
+                             .Where(x => x.record != null))
                             datapoint.MetricType,
-                            datapoint.TimeUnixNano,
-                            datapoint.CumulativeValue,
-                            null,
-                            out var record) || record == null)
-                        continue;
-
-                    try
-                    {
                         await repository.PersistMetricAsync(record, ct);
                         persistedCount++;
-                    }
+                        await repository.PersistMetricAsync(normalized.record!, ct);
                     catch (Exception ex)
                     {
                         telemetry.ReportPersistenceFailure("OtlpMetricsEndpoint", ex.Message, metric.SignalName);
