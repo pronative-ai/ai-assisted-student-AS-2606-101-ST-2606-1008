@@ -1,3 +1,4 @@
+using System.Linq;
 using OpencodeTelemetry.Api.Application.Normalization;
 using OpencodeTelemetry.Api.Infrastructure.Cosmos;
 using OpencodeTelemetry.Api.Infrastructure.Observability;
@@ -46,25 +47,32 @@ public static class OtlpLogsEndpoint
 
             var persistedCount = 0;
 
-            foreach (var logEvent in payload)
-            {
-                if (!normalizer.TryNormalize(
+            var normalizedEvents = payload
+                .Select(logEvent =>
+                {
+                    var success = normalizer.TryNormalize(
                         logEvent.EventName,
                         logEvent.TimeUnixNano,
                         logEvent.BodyText,
                         logEvent.Attributes,
                         null,
-                        out var record) || record == null)
-                    continue;
+                        out var record);
 
+                    return new { logEvent, success, record };
+                })
+                .Where(x => x.success && x.record != null)
+                .Select(x => new { x.logEvent, record = x.record! });
+
+            foreach (var item in normalizedEvents)
+            {
                 try
                 {
-                    await repository.PersistLogEventAsync(record, ct);
+                    await repository.PersistLogEventAsync(item.record, ct);
                     persistedCount++;
                 }
                 catch (Exception ex)
                 {
-                    telemetry.ReportPersistenceFailure("OtlpLogsEndpoint", ex.Message, logEvent.EventName);
+                    telemetry.ReportPersistenceFailure("OtlpLogsEndpoint", ex.Message, item.logEvent.EventName);
                     throw;
                 }
             }
