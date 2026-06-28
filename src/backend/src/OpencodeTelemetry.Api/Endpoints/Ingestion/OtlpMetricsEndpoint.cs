@@ -1,4 +1,4 @@
-using System.Linq;
+using System.IO;
 using System.Linq;
 using OpencodeTelemetry.Api.Application.Normalization;
 using OpencodeTelemetry.Api.Infrastructure.Cosmos;
@@ -80,6 +80,30 @@ public static class OtlpMetricsEndpoint
 
             logger.LogInformation("Ingested {Count} metric records", persistedCount);
             return Results.Ok(new { ingested = persistedCount });
+        }
+        catch (InvalidDataException ex)
+        {
+            telemetry.ReportIngestionFailure("OtlpMetricsEndpoint", ex.Message);
+            logger.LogWarning(ex, "OTLP metrics ingestion failed due to invalid data");
+            return Results.BadRequest(new { error = "Invalid OTLP metrics payload" });
+        }
+        catch (FormatException ex)
+        {
+            telemetry.ReportIngestionFailure("OtlpMetricsEndpoint", ex.Message);
+            logger.LogWarning(ex, "OTLP metrics ingestion failed due to malformed payload");
+            return Results.BadRequest(new { error = "Invalid OTLP metrics payload" });
+        }
+        catch (IOException ex)
+        {
+            telemetry.ReportIngestionFailure("OtlpMetricsEndpoint", ex.Message);
+            logger.LogError(ex, "OTLP metrics ingestion failed due to I/O error");
+            return Results.StatusCode(500);
+        }
+        catch (OperationCanceledException ex) when (ct.IsCancellationRequested)
+        {
+            telemetry.ReportIngestionFailure("OtlpMetricsEndpoint", "Request was canceled");
+            logger.LogInformation(ex, "OTLP metrics ingestion was canceled");
+            return Results.StatusCode(499);
         }
         catch (Exception ex)
         {
