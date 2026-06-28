@@ -16,11 +16,11 @@ public static class OtlpMetricsParser
 
             if (doc.RootElement.TryGetProperty("resourceMetrics", out var resourceMetrics))
             {
-                foreach (var rm in resourceMetrics.EnumerateArray().Where(rm => rm.TryGetProperty("scopeMetrics", out _)))
+                foreach (var resourceMetric in resourceMetrics.EnumerateArray()
+                             .Select(rm => new { rm, hasScopeMetrics = rm.TryGetProperty("scopeMetrics", out var scopeMetrics), scopeMetrics })
+                             .Where(x => x.hasScopeMetrics))
                 {
-                    if (!rm.TryGetProperty("scopeMetrics", out var scopeMetrics)) continue;
-
-                    foreach (var sm in scopeMetrics.EnumerateArray())
+                    foreach (var sm in resourceMetric.scopeMetrics.EnumerateArray())
                     {
                         if (!sm.TryGetProperty("metrics", out var metrics)) continue;
 
