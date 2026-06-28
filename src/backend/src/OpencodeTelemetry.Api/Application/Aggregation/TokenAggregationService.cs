@@ -26,21 +26,20 @@ public class TokenAggregationService
         CancellationToken ct)
     {
         var totals = new MetricTypeValues();
+        var allQueriesSucceeded = true;
 
         foreach (var metricType in MetricTypes)
         {
-            List<MetricRecord> samples;
             try
             {
-                samples = await _repository.QueryMetricsAsync(studentContextKey, metricType, startUtc, endUtc, ct);
+                var samples = await _repository.QueryMetricsAsync(studentContextKey, metricType, startUtc, endUtc, ct);
+                totals = SetValue(totals, metricType, ComputeCumulativeDelta(samples, startUtc, endUtc));
             }
             catch (Exception ex)
             {
                 _telemetry.ReportQueryFailure("GetTotalsAsync", ex.Message, metricType);
-                throw;
+                allQueriesSucceeded = false;
             }
-
-            totals = SetValue(totals, metricType, ComputeCumulativeDelta(samples, startUtc, endUtc));
         }
 
         return new TokenTotalsResponse
@@ -48,7 +47,8 @@ public class TokenAggregationService
             start = startUtc,
             end = endUtc,
             student_context_key = studentContextKey,
-            totals = totals
+            totals = totals,
+            isComplete = allQueriesSucceeded
         };
     }
 
@@ -61,6 +61,7 @@ public class TokenAggregationService
     {
         var buckets = new List<SeriesBucket>();
         var bucketStart = startUtc;
+        var allQueriesSucceeded = true;
 
         while (bucketStart < endUtc)
         {
@@ -72,18 +73,16 @@ public class TokenAggregationService
 
             foreach (var metricType in MetricTypes)
             {
-                List<MetricRecord> samples;
                 try
                 {
-                    samples = await _repository.QueryMetricsAsync(studentContextKey, metricType, bucketStart, bucketEnd, ct);
+                    var samples = await _repository.QueryMetricsAsync(studentContextKey, metricType, bucketStart, bucketEnd, ct);
+                    values = SetValue(values, metricType, ComputeCumulativeDelta(samples, bucketStart, bucketEnd));
                 }
                 catch (Exception ex)
                 {
                     _telemetry.ReportQueryFailure("GetSeriesAsync", ex.Message, metricType);
-                    throw;
+                    allQueriesSucceeded = false;
                 }
-
-                values = SetValue(values, metricType, ComputeCumulativeDelta(samples, bucketStart, bucketEnd));
             }
 
             buckets.Add(new SeriesBucket
@@ -102,6 +101,7 @@ public class TokenAggregationService
             end = endUtc,
             interval = FormatInterval(interval),
             student_context_key = studentContextKey,
+            isComplete = allQueriesSucceeded,
             series = buckets
         };
     }

@@ -2,7 +2,7 @@
 
 **Intent ID:** `intent-2606-101-1008-0004`
 **Service:** `opencode-telemetry-api`
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 ---
 
@@ -54,7 +54,8 @@ Stored in Cosmos DB container `logs`. Partition key: `student_context_key`.
 
 ### 2.1 Token Totals
 
-`GET /api/opencode/token-usage?start=<iso8601>&end=<iso8601>`
+Primary route: `GET /api/opencode/token-usage?start=<iso8601>&end=<iso8601>`
+Alias route:    `GET /api/telemetry/tokens/total?start=<iso8601>&end=<iso8601>`
 
 ```json
 {
@@ -68,13 +69,15 @@ Stored in Cosmos DB container `logs`. Partition key: `student_context_key`.
     "cacheRead": 0,
     "cacheCreation": 0
   },
+  "isComplete": true,
   "derivation_note": "Derived from cumulative opencode.token.usage counter deltas using time_unix_nano. Raw cumulative snapshots are not usage totals."
 }
 ```
 
 ### 2.2 Token Series
 
-`GET /api/opencode/token-usage/series?start=<iso8601>&end=<iso8601>&interval=<duration>`
+Primary route: `GET /api/opencode/token-usage/series?start=<iso8601>&end=<iso8601>&interval=<duration>`
+Alias route:    `GET /api/telemetry/tokens/timeseries?start=<iso8601>&end=<iso8601>&interval=<duration>`
 
 ```json
 {
@@ -82,6 +85,7 @@ Stored in Cosmos DB container `logs`. Partition key: `student_context_key`.
   "end": "2026-01-01T12:00:00Z",
   "interval": "15m",
   "student_context_key": "string",
+  "isComplete": true,
   "series": [
     {
       "bucket_start": "2026-01-01T00:00:00Z",
@@ -150,9 +154,22 @@ Total for `[10:00, 10:30]` = **105** (not 205).
 | `start == end` | Valid (empty window), returns empty result shape |
 | No matching data | `200` with zero totals / empty items |
 
+## 5. Completeness
+
+Both token endpoints return an `isComplete` field.
+
+| `isComplete` | Meaning |
+|--------------|---------|
+| `true`  | All metric-type queries for the requested range succeeded |
+| `false` | One or more metric-type queries failed; returned data is partial |
+
+The UI should show available data even when `isComplete: false` and display an
+incomplete-results indicator rather than a hard failure.  Zero-usage responses
+with `isComplete: true` are valid states and should not be treated as errors.
+
 ---
 
-## 5. Transport
+## 6. Transport
 
 - **OTLP Ingestion**: `POST /otlp/v1/metrics` and `POST /otlp/v1/logs`
 - **Content-Type**: `application/json` or `application/x-protobuf`
@@ -162,7 +179,7 @@ Total for `[10:00, 10:30]` = **105** (not 205).
 
 ---
 
-## 6. Signal Names
+## 7. Signal Names
 
 | Signal | Type | Metric Types |
 |--------|------|-------------|
