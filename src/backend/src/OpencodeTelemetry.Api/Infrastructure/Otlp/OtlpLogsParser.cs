@@ -57,10 +57,22 @@ public static class OtlpLogsParser
 
                             results.Add(payload);
                         }
-                    }
+        catch (JsonException)
                 }
             }
 
+        catch (FormatException)
+        {
+            return null;
+        }
+        catch (OverflowException)
+        {
+            return null;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
             return results.Count > 0 ? results : null;
         }
         catch
