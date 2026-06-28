@@ -1,3 +1,4 @@
+using System.Linq;
 using OpencodeTelemetry.Api.Application.Normalization;
 using OpencodeTelemetry.Api.Infrastructure.Cosmos;
 using OpencodeTelemetry.Api.Infrastructure.Observability;
@@ -51,11 +52,8 @@ public static class OtlpMetricsEndpoint
 
             var persistedCount = 0;
 
-            foreach (var metric in payload)
+            foreach (var metric in payload.Where(metric => AllowedMetricNames.Contains(metric.SignalName)))
             {
-                if (!AllowedMetricNames.Contains(metric.SignalName))
-                    continue;
-
                 foreach (var datapoint in metric.DataPoints)
                 {
                     if (!normalizer.TryNormalize(
