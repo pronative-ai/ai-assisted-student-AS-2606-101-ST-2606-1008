@@ -76,7 +76,7 @@ public static class OtlpLogsEndpoint
                 }
                 catch (InvalidOperationException ex)
                 {
-                    telemetry.ReportPersistenceFailure("OtlpLogsEndpoint", ex.Message, logEvent.EventName);
+                    telemetry.ReportPersistenceFailure("OtlpLogsEndpoint", ex.Message, item.logEvent.EventName);
                     throw;
                 }
                 catch (IOException ex)

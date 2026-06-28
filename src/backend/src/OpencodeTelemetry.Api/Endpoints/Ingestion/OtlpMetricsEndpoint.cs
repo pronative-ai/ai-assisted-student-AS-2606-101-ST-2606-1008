@@ -57,23 +57,19 @@ public static class OtlpMetricsEndpoint
             {
                 foreach (var datapoint in metric.DataPoints)
                 {
-                foreach (var normalized in metric.DataPoints
-                             .Select(datapoint =>
-                             {
-                                 return normalizer.TryNormalize(
-                                     datapoint.MetricType,
-                                     datapoint.TimeUnixNano,
-                                     datapoint.CumulativeValue,
-                                     null,
-                                     out var record)
-                                     ? new { datapoint, record }
-                                     : new { datapoint, record = (object?)null };
-                             })
-                             .Where(x => x.record != null))
-                            datapoint.MetricType,
-                        await repository.PersistMetricAsync(record, ct);
-                        persistedCount++;
-                        await repository.PersistMetricAsync(normalized.record!, ct);
+                    try
+                    {
+                        if (normalizer.TryNormalize(
+                                datapoint.MetricType,
+                                datapoint.TimeUnixNano,
+                                datapoint.CumulativeValue,
+                                null,
+                                out var record))
+                        {
+                            await repository.PersistMetricAsync(record!, ct);
+                            persistedCount++;
+                        }
+                    }
                     catch (Exception ex)
                     {
                         telemetry.ReportPersistenceFailure("OtlpMetricsEndpoint", ex.Message, metric.SignalName);

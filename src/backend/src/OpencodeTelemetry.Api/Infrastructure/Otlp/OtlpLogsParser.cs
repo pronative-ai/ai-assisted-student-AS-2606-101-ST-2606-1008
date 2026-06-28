@@ -57,10 +57,16 @@ public static class OtlpLogsParser
 
                             results.Add(payload);
                         }
-        catch (JsonException)
+                    }
                 }
             }
 
+            return results.Count > 0 ? results : null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
         catch (FormatException)
         {
             return null;
@@ -72,8 +78,6 @@ public static class OtlpLogsParser
         catch (InvalidOperationException)
         {
             return null;
-        }
-            return results.Count > 0 ? results : null;
         }
         catch
         {
