@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 
@@ -20,11 +21,16 @@ public static class OtlpLogsParser
                 {
                     if (!rl.TryGetProperty("scopeLogs", out var scopeLogs)) continue;
 
-                    foreach (var sl in scopeLogs.EnumerateArray())
+                    foreach (var scopeLog in scopeLogs.EnumerateArray()
+                                 .Select(sl => new
+                                 {
+                                     ScopeLog = sl,
+                                     HasLogRecords = sl.TryGetProperty("logRecords", out var logRecords),
+                                     LogRecords = logRecords
+                                 })
+                                 .Where(x => x.HasLogRecords))
                     {
-                        if (!sl.TryGetProperty("logRecords", out var logRecords)) continue;
-
-                        foreach (var logRecord in logRecords.EnumerateArray())
+                        foreach (var logRecord in scopeLog.LogRecords.EnumerateArray())
                         {
                             var payload = new OtlpLogPayload();
 
