@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.Json;
 
 namespace OpencodeTelemetry.Api.Infrastructure.Otlp;
@@ -15,7 +16,7 @@ public static class OtlpMetricsParser
 
             if (doc.RootElement.TryGetProperty("resourceMetrics", out var resourceMetrics))
             {
-                foreach (var rm in resourceMetrics.EnumerateArray())
+                foreach (var rm in resourceMetrics.EnumerateArray().Where(rm => rm.TryGetProperty("scopeMetrics", out _)))
                 {
                     if (!rm.TryGetProperty("scopeMetrics", out var scopeMetrics)) continue;
 
