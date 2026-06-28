@@ -20,11 +20,11 @@ public static class OtlpMetricsParser
                              .Select(rm => new { rm, hasScopeMetrics = rm.TryGetProperty("scopeMetrics", out var scopeMetrics), scopeMetrics })
                              .Where(x => x.hasScopeMetrics))
                 {
-                    foreach (var sm in resourceMetric.scopeMetrics.EnumerateArray())
+                    foreach (var scopeMetric in resourceMetric.scopeMetrics.EnumerateArray()
+                                 .Select(sm => new { sm, hasMetrics = sm.TryGetProperty("metrics", out var metrics), metrics })
+                                 .Where(x => x.hasMetrics))
                     {
-                        if (!sm.TryGetProperty("metrics", out var metrics)) continue;
-
-                        foreach (var metric in metrics.EnumerateArray())
+                        foreach (var metric in scopeMetric.metrics.EnumerateArray())
                         {
                             var signalName = metric.GetProperty("name").GetString() ?? string.Empty;
                             var payload = new OtlpMetricPayload { SignalName = signalName };
