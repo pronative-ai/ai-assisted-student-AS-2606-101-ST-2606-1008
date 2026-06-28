@@ -70,7 +70,16 @@ public static class OtlpLogsEndpoint
                     await repository.PersistLogEventAsync(item.record, ct);
                     persistedCount++;
                 }
-                catch (Exception ex)
+                catch (OperationCanceledException) when (ct.IsCancellationRequested)
+                {
+                    throw;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    telemetry.ReportPersistenceFailure("OtlpLogsEndpoint", ex.Message, logEvent.EventName);
+                    throw;
+                }
+                catch (IOException ex)
                 {
                     telemetry.ReportPersistenceFailure("OtlpLogsEndpoint", ex.Message, item.logEvent.EventName);
                     throw;
@@ -80,7 +89,18 @@ public static class OtlpLogsEndpoint
             logger.LogInformation("Ingested {Count} log event records", persistedCount);
             return Results.Ok(new { ingested = persistedCount });
         }
-        catch (Exception ex)
+        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+        {
+            logger.LogInformation("OTLP logs ingestion request was canceled");
+            return Results.StatusCode(499);
+        }
+        catch (InvalidOperationException ex)
+        {
+            telemetry.ReportIngestionFailure("OtlpLogsEndpoint", ex.Message);
+            logger.LogError(ex, "OTLP logs ingestion failed");
+            return Results.StatusCode(500);
+        }
+        catch (IOException ex)
         {
             telemetry.ReportIngestionFailure("OtlpLogsEndpoint", ex.Message);
             logger.LogError(ex, "OTLP logs ingestion failed");
