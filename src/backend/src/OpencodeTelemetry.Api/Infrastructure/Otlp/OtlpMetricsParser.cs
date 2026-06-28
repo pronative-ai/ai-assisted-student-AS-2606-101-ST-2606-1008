@@ -46,7 +46,15 @@ public static class OtlpMetricsParser
 
             return results.Count > 0 ? results : null;
         }
-        catch
+        catch (JsonException)
+        {
+            return null;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+        catch (FormatException)
         {
             return null;
         }
